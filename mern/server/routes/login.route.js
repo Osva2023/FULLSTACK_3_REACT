@@ -1,6 +1,6 @@
 // login.routes.js
 import express from 'express';
-import { loginUser } from '/Users/gloriagomez/osvaldo/Codeboxx/FULLSTACK_2_MERN/mern/server/controller/login.controller.js';
+import { loginUser } from '../controller/login.controller.js';
 
 const router = express.Router();
 
