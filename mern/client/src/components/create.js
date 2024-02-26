@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { BootstrapErrorToast, BootstrapSuccessToast } from './Alerts';
 
 export default function Create() {
     const [form, setForm] = useState({
@@ -11,6 +12,8 @@ export default function Create() {
         fee: '',
         sales: '',
     });
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
     const navigate = useNavigate();
     // These methods will update the state properties
     function updateForm(value) {
@@ -34,18 +37,41 @@ export default function Create() {
     
             if (!response.ok) {
                 const errorMessage = await response.json();
-                window.alert(`Please provide all required fields. ${errorMessage.error}`);
+                setShowErrorToast(true);
+                setShowSuccessToast(false);
+                console.error(`Create agent failed: ${errorMessage.error}`);
                 return;
             }
+
+            setShowErrorToast(false);
+            setShowSuccessToast(true);
     
             setForm({ first_name: '', last_name: '', email: '', region: '', rating: '', fee: '', sales: ''});
+            setTimeout(() => {
             navigate('/');
+            }, 2000);
+
         } catch (error) {
             console.error(`Unexpected error: ${error}`);
-            window.alert('An unexpected error occurred while creating the agent.');
+            setShowErrorToast(true);
+            
         }
     }
-    
+    const closeErrorToast = () => {
+        setShowErrorToast(false);
+    };
+
+    const closeSuccessToast = () => {
+        setShowSuccessToast(false);
+    };
+    useEffect(() => {
+        const successTimeout = setTimeout(() => {
+            setShowSuccessToast(false);
+        }, 3000);
+        return () => {
+            clearTimeout(successTimeout);
+        };
+        }, [showSuccessToast]);
     // This following section will display the form that takes the input from the user.
     return (
             <div className="content-box create-box" >
@@ -131,6 +157,8 @@ export default function Create() {
                         />
                     </div>
                 </form>
+                {showErrorToast && <BootstrapErrorToast message="Create agent failed" onClose={closeErrorToast} />}
+                {showSuccessToast && <BootstrapSuccessToast message="Agent created successfully" onClose={closeSuccessToast} />}
             </div>
     );
 }
