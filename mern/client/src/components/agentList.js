@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/navbar";
+import { BootstrapErrorToast, BootstrapSuccessToast } from './Alerts';
+
+
+
 const Agent = (props) => (
  <tr>
    <td>{props.agent.last_name}, {props.agent.first_name}</td>
@@ -20,36 +24,46 @@ const Agent = (props) => (
    </td>
  </tr>
 );
+
 export default function AgentList() {
- const [agents, setAgents] = useState([]);
-  // This method fetches the agents from the database.
- useEffect(() => {
-  console.log(' USE EFFECT: Fetching agents from the database...');      // debugging porpuses  
-   async function getAgents() {
-    console.log('Fetching agents from the database...');           // debugging porpuses
-     const response = await fetch(`http://localhost:3001/agent`);
+  const [agents, setAgents] = useState([]);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+
+  useEffect(() => {
+    
+    async function getAgents() {
+      console.log('Fetching agents from the database...');           // debugging porpuses
+      const response = await fetch(`http://localhost:3001/agent`);
       if (!response.ok) {
-       const message = `An error occurred: ${response.statusText}`;
-       window.alert(message);
-       return;
-     }
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
       const agents = await response.json();
-     console.log('Agents fetched from the database:', agents);   // debugging porpuses
-     setAgents(agents);
-   }
+      console.log('Agents fetched from the database:', agents);   // debugging porpuses
+      setAgents(agents);
+    }
     getAgents();
     return;
- }, [agents.length]);
-    console.log ('current state:', agents);       // debugging porpuses
+  }, []); // Empty dependency array     // debugging porpuses
 
   // This method will delete an agent
- async function deleteAgent(id) {
-   await fetch(`http://localhost:3001/agent/${id}`, {
-     method: "DELETE"
-   });
-    const newAgents = agents.filter((el) => el._id !== id);
-   setAgents(newAgents);
- }
+  async function deleteAgent(id) {
+    try {
+      await fetch(`http://localhost:3001/agent/${id}`, {
+        method: "DELETE"
+      });
+      setShowErrorToast(false); // Hide the error toast
+      setShowSuccessToast(true); // Show the success toast
+      const newAgents = agents.filter((el) => el._id !== id);
+      setAgents(newAgents);
+    } catch (error) {
+      setShowSuccessToast(false); // Hide the success toast
+      setShowErrorToast(true); // Show the error toast
+      console.log(error);
+    }
+  }
   // This method will map out the agents on the table
  function agentList() {
    return agents.map((agent) => {
@@ -63,23 +77,28 @@ export default function AgentList() {
    });
  }
   // This following section will display the table with the agents of individuals.
- return (
-  <div style={{ margin: '20px auto', maxWidth: '1400px' }}>
-  <Navbar />
-  <h3>Agent List</h3>
-  <table className="table table-striped" style={{ marginTop: 20 }}>
-    <thead>
-      <tr>
-        <th>Full_Name</th>
-        <th>Region</th>
-        <th>Rating</th>
-        <th>Sales</th>
-        <th>Fee</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>{agentList()}</tbody>
-  </table>
-</div>
-);
+  return (
+    <> 
+    {showSuccessToast && <BootstrapSuccessToast message="Agent deleted successfully!" onClose={() => { console.log('Closing toast'); setShowSuccessToast(false); }} />}
+    {showErrorToast && <BootstrapErrorToast message="Error deleting agent. Please try again." onClose={() => { console.log('Closing toast'); setShowErrorToast(false); }} />}
+      <div style={{ margin: '20px auto', maxWidth: '1400px' }}>
+        <Navbar />
+        <h3>Agent List</h3>
+        <table className="table table-striped" style={{ marginTop: 20 }}>
+          <thead>
+            <tr>
+              <th>Full_Name</th>
+              <th>Region</th>
+              <th>Rating</th>
+              <th>Sales</th>
+              <th>Fee</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>{agentList()}</tbody>
+        </table>
+      </div>
+    </>
+      
+  );
 }
