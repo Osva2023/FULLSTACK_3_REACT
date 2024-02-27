@@ -48,7 +48,7 @@ export default function Create() {
     
             setForm({ first_name: '', last_name: '', email: '', region: '', rating: '', fee: '', sales: ''});
             setTimeout(() => {
-            navigate('/');
+            navigate('/agent-list');
             }, 2000);
 
         } catch (error) {

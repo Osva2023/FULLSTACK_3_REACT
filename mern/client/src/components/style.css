@@ -37,6 +37,7 @@
     margin-left: 4px; /* Para agregar espacio entre la etiqueta y el asterisco */
 }
 .card-container {
+  margin-top: '40px';
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;

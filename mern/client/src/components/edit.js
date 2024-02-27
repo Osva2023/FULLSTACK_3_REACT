@@ -83,7 +83,7 @@ export default function Edit() {
 
       setShowSuccessToast(true);
       setTimeout(() => {
-        navigate("/");
+        navigate("/agent-list");
       }, 2000);
     } else {
       setIsConfirmToastVisible(true);
