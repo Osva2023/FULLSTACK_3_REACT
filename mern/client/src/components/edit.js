@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
+import { BootstrapErrorToast, BootstrapSuccessToast } from './Alerts';
  export default function Edit() {
  const [form, setForm] = useState({
    first_name: "",
@@ -9,22 +10,29 @@ import { useParams, useNavigate } from "react-router";
    sales: "",
    fee: "",
  });
+ const [showErrorToast, setShowErrorToast] = useState(false);
+ const [showSuccessToast, setShowSuccessToast] = useState(false);
+ 
  const params = useParams();
  const navigate = useNavigate();
+
   useEffect(() => {
    async function fetchData() {
      const id = params.id.toString();
      const response = await fetch(`http://localhost:3001/agent/${id}`, {
        method: "GET",
      });
-     console.log(response);
+     
       if (!response.ok) {
        const message = `An error has occurred: ${response.statusText}`;
-       window.alert(message);
+       setShowErrorToast(true);
+       setShowSuccessToast(false);
+       console.log(message);
        return;
      }
       const agents = await response.json();
      if (!agents) {
+      setShowErrorToast(true);
        window.alert(`Agent with id ${id} not found`);
        navigate("/");
        return;
@@ -45,6 +53,11 @@ import { useParams, useNavigate } from "react-router";
  }
   async function onSubmit(e) {
    e.preventDefault();
+
+   if (!form.first_name || !form.last_name || !form.region || !form.rating || !form.sales || !form.fee) {
+     setShowErrorToast(true);
+     return;
+   }
    const editedPerson = {
      first_name: form.first_name,
      last_name: form.last_name,
@@ -52,17 +65,23 @@ import { useParams, useNavigate } from "react-router";
      rating: form.rating,
      sales: form.sales,
      fee: form.fee,
-   };
-    // This will send a post request to update the data in the database.
-   await fetch(`http://localhost:3001/agent/update/${params.id}`, {
+   }; 
+   
+     
+    await fetch(`http://localhost:3001/agent/update/${params.id}`, {
      method: "POST",
      body: JSON.stringify(editedPerson),
      headers: {
        'Content-Type': 'application/json'
      },
    });
-    navigate("/");
+   setShowSuccessToast(true);
+   setTimeout(() => {
+     navigate("/");
+   }, 2000);
  }
+
+ 
   // This following section will display the form that takes input from the user to update the data.
  return (
    <div>
@@ -137,6 +156,9 @@ import { useParams, useNavigate } from "react-router";
          />
        </div>
      </form>
+     {showErrorToast && <BootstrapErrorToast message="Please fill in all required fields." onClose={() => setShowErrorToast(false)} />}
+{showSuccessToast && <BootstrapSuccessToast message="Agent updated successfully." onClose={() => setShowSuccessToast(false)} />}
+
    </div>
  );
 }
