@@ -4,6 +4,7 @@ import Navbar from './navbar';
 
 const TransactionPage = () => {
   const [agents, setAgents] = useState([]);
+  const [transactions, setTransactions] = useState([]); // Placeholder for transaction data
 
   useEffect(() => {
     // Fetch agents from your backend
@@ -13,31 +14,25 @@ const TransactionPage = () => {
       .then(data => setAgents(data));
   }, []);
 
+  const handleDateSort = () => {
+    // Implement your sorting logic here
+  };
+
   return (
     <div>
       <Navbar />
-      <Container style={{ maxWidth: '600px', margin: 'auto', marginTop: '2px' }}>
+      <Container style={{ maxWidth: '800px', margin: 'auto', paddingTop: '20px', paddingBottom: '20px' }}>
         <Table striped bordered hover>
-          <thead>
+        <thead>
             <tr>
-              <th>#</th>
-              <th>Date</th>
+              <th><Button variant="link" onClick={handleDateSort}>Date</Button></th>
               <th>Amount</th>
               <th>Agent Full Name</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>2024-01-01</td>
-              <td>10000</td>
-              <td>Javier Balmaseda</td>
-            </tr>
-          </tbody>
         </Table>
-
       </Container>
-      <Container style={{ maxWidth: '800px', margin: 'auto' }}>
+      <Container style={{ maxWidth: '800px', margin: 'auto', paddingTop: '20px', paddingBottom: '20px' }}>
         <Form>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Transaction Amount</Form.Label>
