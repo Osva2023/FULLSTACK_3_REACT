@@ -22,3 +22,21 @@ export const BootstrapErrorToast = ({ message, onClose }) => (
     </Toast>
   </div>
 );
+export const BootstrapConfirmToast = ({ message, onConfirm, onCancel }) => (
+  <Toast show={true}>
+    <Toast.Header closeButton={false}>
+      <strong className="mr-auto">Confirmación</strong>
+    </Toast.Header>
+    <Toast.Body>
+      {message}
+      <div className="mt-2">
+        <button className="btn btn-success mr-2" onClick={onConfirm}>
+          Confirmar
+        </button>
+        <button className="btn btn-secondary" onClick={onCancel}>
+          Cancelar
+        </button>
+      </div>
+    </Toast.Body>
+  </Toast>
+);
