@@ -10,9 +10,9 @@ function AgentListCard() {
     const handleCreateAgentClick = () => {
       navigate('/create');
     };
-   
+    
     return (
-      <Card style={{ width: '25%' }}>
+        <Card style={{ width: '25%' }}>
         <Card.Img variant="top" src={process.env.PUBLIC_URL + '/sales-recruitment.jpg'} style={{ height: '280px' }}/>
         <Card.Body>
           <Card.Title>Agent Management</Card.Title>
@@ -31,15 +31,13 @@ function AgentListCard() {
         </Card.Body>
       </Card>
     );
-  }
+}
 function TransactionCard() {
     const navigate = useNavigate();
-  
-    const handleButtonClick = () => {
-      navigate('/agent-list');
+    const handleTransactionClick = () => {
+      navigate('/transaction');
     };
-  
-    return (
+   return (
       <Card style={{ width: '25%' }}>
         <Card.Img variant="top" src={process.env.PUBLIC_URL + '/8552832.png'} style={{ height: '300px' }}/>
         <Card.Body>
@@ -48,7 +46,7 @@ function TransactionCard() {
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </Card.Text>
-          <Button variant="primary" onClick={handleButtonClick}>
+          <Button variant="primary" onClick={handleTransactionClick}>
             to Transaction Page
           </Button>
         </Card.Body>

@@ -9,6 +9,7 @@ import {Login} from '../src/components/Login';
 import Edit from '../src/components/edit';
 import Create from '../src/components/create';
 import HomeComponent from './components/Home.js';
+import TransactionPage from './components/Transaction.js';
 import './components/style.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/edit/:id" element={<Edit />} />
           <Route path="/create" element={<Create />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/transaction/" element={<TransactionPage />} />
         </Routes>
       
     </AuthProvider>
