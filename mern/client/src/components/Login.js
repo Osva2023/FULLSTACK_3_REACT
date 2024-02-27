@@ -24,7 +24,7 @@ export function Login() {
   };
 
   if (loggedIn) {
-    return <Navigate to="/" />;
+    return <Navigate to="/home" />;
   }
 
   if (loginFailed) {

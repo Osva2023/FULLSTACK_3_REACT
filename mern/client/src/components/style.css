@@ -36,3 +36,8 @@
     color: red;
     margin-left: 4px; /* Para agregar espacio entre la etiqueta y el asterisco */
 }
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}

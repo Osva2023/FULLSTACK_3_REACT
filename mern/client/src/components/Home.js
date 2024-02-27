@@ -1,18 +1,24 @@
-// Home.js
+// src/components/HomePage.js
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import Navbar from "./navbar";
+import AgentList from "./agentList";
+import {AgentListCard, BasicCard} from "./Cards";
+import { Link } from "react-router-dom";
 
-function Home() {
-  const navigate = useNavigate();
-
+const HomeComponent = () => {
   return (
     <div>
-      <h1>Welcome to Rocket Elevators</h1>
-      <button onClick={() => navigate('/')}>Continue to Agent List</button>
-      <button onClick={() => window.location.href = 'http://localhost:3000/'}>Continue to Agent List</button>
+      <Navbar />
+      <h2>Welcome to the Home Page!</h2>
+      <div className="card-container">
+      <AgentListCard AgentListCard/>
+      <BasicCard BasicCard/>
+      
+    </div>
+      <Link to="/agent-list">Go to Agent List</Link>
     </div>
   );
-}
+};
 
-export default Home;
+export default HomeComponent;
