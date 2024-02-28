@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { useCookies } from 'react-cookie';
 import { BootstrapErrorToast } from './Alerts'; 
 
 export function Login() {
@@ -9,12 +10,14 @@ export function Login() {
   const [loginFailed, setLoginFailed] = useState(false);
   const { user, login } = useAuth();
   const [showErrorToast, setShowErrorToast] = useState(false);
+  const [cookies, setCookie] = useCookies(['sessionToken']);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     login(email, password)
       .then(() => {
+        setCookie('sessionToken', response.sessionToken, { path: '/' });
         console.log('logged in');
       })
       .catch((err) => {

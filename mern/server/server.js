@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { connectToServer } from './db/conn.js';
 import agentRoutes from './routes/agent.route.js';
 import loginRoute from './routes/login.route.js';
+import validRouter from './routes/valid.router.js';
 
 dotenv.config({ path: './config.env' });
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 app.use(agentRoutes);
 app.use('/', loginRoute);
+app.use(validRouter)
 
 // Connect to MongoDB before starting the server
 connectToServer().then(async () => {
