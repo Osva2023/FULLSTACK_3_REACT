@@ -7,7 +7,7 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
-  const { loggedIn, login } = useAuth();
+  const { user, login } = useAuth();
   const [showErrorToast, setShowErrorToast] = useState(false);
 
   const handleSubmit = (e) => {
@@ -23,7 +23,7 @@ export function Login() {
       });
   };
 
-  if (loggedIn) {
+  if (user) {
     return <Navigate to="/home" />;
   }
 

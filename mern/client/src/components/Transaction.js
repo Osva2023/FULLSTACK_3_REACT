@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Form, Button, Container } from 'react-bootstrap';
-import Navbar from './navbar';
+
 
 const TransactionPage = () => {
   const [agents, setAgents] = useState([]);
@@ -20,7 +20,7 @@ const TransactionPage = () => {
 
   return (
     <div>
-      <Navbar />
+      
       <Container style={{ maxWidth: '800px', margin: 'auto', paddingTop: '20px', paddingBottom: '20px' }}>
         <Table striped bordered hover>
         <thead>

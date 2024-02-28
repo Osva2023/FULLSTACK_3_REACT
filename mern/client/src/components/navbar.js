@@ -1,12 +1,8 @@
 import React from "react";
-
-
-// We import bootstrap to make our application look better.
 import "bootstrap/dist/css/bootstrap.css";
- // We import NavLink to utilize the react router.
 import { NavLink } from "react-router-dom";
- // Here, we display our Navbar
- export default function Navbar() {
+import { FaUser } from "react-icons/fa";
+ export default function Navbar({userFirstName}) {
   return (
     <div className="navbar-custom"> 
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,9 +24,16 @@ import { NavLink } from "react-router-dom";
           <ul className="navbar-nav">
             <li className="nav-item">
               <div className="nav-link btn-outline-primary" style={{ color: '#0a65a0', fontSize: '30px' }} >
-                Welcome to Rocket Elevator Admin Page
+                Rocket Elevator Admin Page
               </div>
             </li>
+            {userFirstName && ( // Only display this li if userFirstName is not null
+              <li className="nav-item" style={{ fontSize: '20px', marginLeft: '200px' }} >
+                <div className="nav-link btn-outline-primary" style={{ color: '#a52a52a', fontSize: '30px' }} >
+                  <FaUser /> Welcome, {userFirstName} 
+                </div>
+              </li>
+            )}
           </ul>
         </div>
       </nav>

@@ -11,7 +11,7 @@ export const loginUser = async (req, res) => {
     }
 
     // If the user is found and the password matches, return a success response
-    res.status(200).json({ message: 'Logged in successfully' });
+    res.status(200).json({ message: 'Logged in successfully', first_name: user.first_name });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

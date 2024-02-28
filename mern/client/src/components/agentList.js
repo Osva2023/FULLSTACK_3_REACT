@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/navbar";
+
 import { BootstrapErrorToast, BootstrapSuccessToast, BootstrapConfirmToast } from './Alerts';
 
 const Agent = (props) => (
@@ -120,7 +120,7 @@ export default function AgentList() {
         />
       }
       <div style={{ margin: '20px auto', maxWidth: '1400px' }}>
-        <Navbar />
+        
         <h3>Agent List</h3>
         <table className="table table-striped" style={{ marginTop: 20 }}>
           <thead>

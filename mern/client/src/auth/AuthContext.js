@@ -1,15 +1,15 @@
 // AuthContext.js
+// AuthContext.js
 import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [user, setUser] = useState(null); // Ajusta según tu lógica de autenticación
 
   const login = (email, password) => {
     return new Promise((resolve, reject) => {
-      // Replace this with your actual API call
+      // Reemplaza esto con tu llamada API real
       fetch('http://localhost:3001/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -17,9 +17,11 @@ export function AuthProvider({ children }) {
       })
         .then((response) => {
           if (response.ok) {
-            setLoggedIn(true);
-            setLoginStatus(!loginStatus); // Actualiza el estado de login
-            resolve();
+            response.json().then((data) => {
+              const { first_name, ...otherUserData } = data; // Extraer first_name y otros datos del usuario si los hay
+              setUser({ first_name, ...otherUserData });
+              resolve();
+            });
           } else {
             response.json().then((data) => reject(data.error));
           }
@@ -27,14 +29,15 @@ export function AuthProvider({ children }) {
         .catch((err) => reject(err.message));
     });
   };
+
   const logout = () => {
     // Implementa la lógica de cierre de sesión aquí
-    // Por ejemplo, simplemente establece loggedIn en false
-    setLoggedIn(false);
+    // Por ejemplo, simplemente establece el usuario en null
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ loggedIn, login, loginStatus }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
