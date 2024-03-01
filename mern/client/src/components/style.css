@@ -52,3 +52,21 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+.logout-button {
+  background-color: #f8f9fa;
+  border: none;
+  color: #316fad;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin: 4px 2px 4px 60px; 
+}
+.nav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

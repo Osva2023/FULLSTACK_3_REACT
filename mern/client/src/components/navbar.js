@@ -1,12 +1,14 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { NavLink } from "react-router-dom";
-import { FaUser } from "react-icons/fa";
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useCookies } from "react-cookie";
+import { useLogout } from "../auth/withAuthProtection";
  export default function Navbar() {
   const [cookies] = useCookies(['userFirstName', 'userLastName']);
   const userFirstName = cookies.userFirstName;
   const userLastName = cookies.userLastName;
+  const logout = useLogout();
   
   return (
     <div className="navbar-custom"> 
@@ -32,11 +34,14 @@ import { useCookies } from "react-cookie";
                 Rocket Elevator Admin Page
               </div>
             </li>
-            {userFirstName && userLastName && ( // Only display this li if userFirstName is not null
+            {userFirstName && userLastName && ( 
               <li className="nav-item" style={{ fontSize: '20px', marginLeft: '200px' }} >
-                <div className="nav-link btn-outline-primary" style={{ color: '#a52a52', fontSize: '30px' }} >
-                  <FaUser /> Welcome, {userFirstName} {userLastName}
+                <div className="nav-link btn-outline-primary" style={{ color: '#a52a52', fontSize: '25px' }} >
+                <div> <FaUser /> Welcome, </div>
+                <div>{userFirstName} {userLastName}</div>
                 </div>
+                <button className="logout-button" onClick={logout}>
+                  <FaSignOutAlt/>Logout</button>
               </li>
             )}
           </ul>

@@ -39,3 +39,12 @@ export function withAuthProtection(WrappedComponent) {
     return <WrappedComponent {...props} />;
   };
 }
+export function useLogout() {
+    const [cookies, , removeCookie] = useCookies(['sessionToken', 'userFirstName', 'userLastName']);
+    return () => {
+        removeCookie('sessionToken');
+        removeCookie('userFirstName');
+        removeCookie('userLastName');
+        window.location.href = '/';
+    };
+}

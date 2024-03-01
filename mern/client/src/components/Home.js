@@ -15,9 +15,7 @@ const HomeComponent = () => {
         <TransactionCard />
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '80px' }}>
-        <Link to="/agent-list" className="btn btn-primary" style={{ backgroundColor: '#ff4136' }} >Log out</Link>
-      </div>
+      
     </div>
   );
 };
