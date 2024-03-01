@@ -1,27 +1,40 @@
-// valid.controller.js
+// controller/valid.controller.js
 import { validateToken } from '../services/validServices.js';
-import Session from '../db/schemas/session.Schema.js';
 
 export const validateTokenController = async (req, res) => {
-    const { token } = req.query;
+  console.log('validateTokenController is called');
+  const { token } = req.query;
+  console.log ('Received token:', token);                     // debugin pruposes
 
-    try {
-        const validation = await validateToken(token);
+  try {
+    const validation = await validateToken(token);
+    console.log ('Validation result:', validation);           // debugin pruposes
 
-        if (validation.valid) {
-            const session = await Session.findOne({ sessionToken: token });
-
-            if (session) {
-                const { first_name, last_name, id } = session.user;
-                res.json({ status: 'ok', data: { valid: true, user: { first_name, last_name, id }, message: null } });
-            } else {
-                res.json({ status: 'ok', data: { valid: false, user: null, message: 'Invalid session token' } });
-            }
-        } else {
-            res.json({ status: 'ok', data: { valid: false, user: null, message: 'Invalid session token' } });
+    if (validation.valid) {
+      res.json({
+        status: 'ok',
+        data: {
+          valid: true,
+          user: validation.user,
+          message: null
         }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ status: 'error', data: null, message: 'Internal Server Error' });
+      });
+    } else {
+      res.json({
+        status: 'ok',
+        data: {
+          valid: false,
+          user: null,
+          message: 'Invalid session token'
+        }
+      });
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: 'error',
+      data: null,
+      message: 'An error occurred while validating the token'
+    });
+  }
 };

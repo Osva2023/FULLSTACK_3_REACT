@@ -2,11 +2,16 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { NavLink } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
- export default function Navbar({userFirstName}) {
+import { useCookies } from "react-cookie";
+ export default function Navbar() {
+  const [cookies] = useCookies(['userFirstName', 'userLastName']);
+  const userFirstName = cookies.userFirstName;
+  const userLastName = cookies.userLastName;
+  
   return (
     <div className="navbar-custom"> 
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <NavLink className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/home">
           <img style={{width : "200px", marginRight: "430px"}} src="/rocketLogo.png" alt="Rocket logo"></img>
         </NavLink>
         <button
@@ -27,10 +32,10 @@ import { FaUser } from "react-icons/fa";
                 Rocket Elevator Admin Page
               </div>
             </li>
-            {userFirstName && ( // Only display this li if userFirstName is not null
+            {userFirstName && userLastName && ( // Only display this li if userFirstName is not null
               <li className="nav-item" style={{ fontSize: '20px', marginLeft: '200px' }} >
-                <div className="nav-link btn-outline-primary" style={{ color: '#a52a52a', fontSize: '30px' }} >
-                  <FaUser /> Welcome, {userFirstName} 
+                <div className="nav-link btn-outline-primary" style={{ color: '#a52a52', fontSize: '30px' }} >
+                  <FaUser /> Welcome, {userFirstName} {userLastName}
                 </div>
               </li>
             )}

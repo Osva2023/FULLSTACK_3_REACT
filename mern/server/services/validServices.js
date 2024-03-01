@@ -1,21 +1,26 @@
 // server/services/validServices.js
 
 import Session from '../db/schemas/session.Schema.js';
+import User from '../db/schemas/user.Schema.js';
 
-const validateToken = async (token) => {
-  try {
-    const session = await Session.findOne({ session_token: token });
+export const validateToken = async (token) => {
+  const session = await Session.findOne({ sessionToken: token });
 
-    if (session) {
-      const { first_name, last_name, id } = session.user;
-      return { valid: true, user: { first_name, last_name, id } };
-    } else {
-      return { valid: false, user: null };
-    }
-  } catch (error) {
-    console.error(error);
-    throw new Error('Internal Server Error');
+  if (!session) {
+    return { valid: false };
   }
-};
 
-export { validateToken };
+  const user = await User.findById(session.userId);
+  if (!user) {
+    return { valid: false };
+  }
+
+  return {
+    valid: true,
+    user: {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      id: user._id
+    }
+  };
+};

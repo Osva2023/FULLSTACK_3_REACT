@@ -1,32 +1,39 @@
 // AuthContext.js
-// AuthContext.js
-import React, { createContext, useContext, useState } from 'react';
 
+import React, { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // Ajusta según tu lógica de autenticación
-
-  const login = (email, password) => {
+  const [user, setUser] = useState(null); // Adjust according to your authentication logic
+  
+  
+  const login = (email, password, navigate) => {
+    
     return new Promise((resolve, reject) => {
-      // Reemplaza esto con tu llamada API real
       fetch('http://localhost:3001/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
-        .then((response) => {
-          if (response.ok) {
-            response.json().then((data) => {
-              const { first_name, ...otherUserData } = data; // Extraer first_name y otros datos del usuario si los hay
-              setUser({ first_name, ...otherUserData });
-              resolve();
-            });
-          } else {
-            response.json().then((data) => reject(data.error));
-          }
-        })
-        .catch((err) => reject(err.message));
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);                          // debugin pruposes
+        if (data.status === 'ok') {
+          // Store the token
+          const token = data.sessionToken;
+          console.log('Token:', token);              // debugin pruposes
+          resolve({
+            userId: data.user_id,
+            token
+          });
+        } else {
+          reject(new Error(data.message));
+        }
+      }) // This was missing
+      .catch((error) => {
+        console.error("Error:", error);
+        reject(error);
+      });
     });
   };
 
@@ -37,7 +44,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
