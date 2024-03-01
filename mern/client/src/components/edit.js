@@ -102,7 +102,7 @@ export default function Edit() {
   }
 
   return (
-    <div>
+    <div className="content-box edit-box" >
       <h3>Update Agent</h3>
       <form onSubmit={onSubmit}>
         <div className="form-group">

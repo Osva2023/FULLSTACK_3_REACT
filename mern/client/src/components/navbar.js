@@ -1,16 +1,19 @@
 import React from "react";
-
-
-// We import bootstrap to make our application look better.
 import "bootstrap/dist/css/bootstrap.css";
- // We import NavLink to utilize the react router.
 import { NavLink } from "react-router-dom";
- // Here, we display our Navbar
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
+import { useCookies } from "react-cookie";
+import { useLogout } from "../auth/withAuthProtection";
  export default function Navbar() {
+  const [cookies] = useCookies(['userFirstName', 'userLastName']);
+  const userFirstName = cookies.userFirstName;
+  const userLastName = cookies.userLastName;
+  const logout = useLogout();
+  
   return (
     <div className="navbar-custom"> 
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <NavLink className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/home">
           <img style={{width : "200px", marginRight: "430px"}} src="/rocketLogo.png" alt="Rocket logo"></img>
         </NavLink>
         <button
@@ -28,9 +31,19 @@ import { NavLink } from "react-router-dom";
           <ul className="navbar-nav">
             <li className="nav-item">
               <div className="nav-link btn-outline-primary" style={{ color: '#0a65a0', fontSize: '30px' }} >
-                Welcome to Rocket Elevator Admin Page
+                Rocket Elevator Admin Page
               </div>
             </li>
+            {userFirstName && userLastName && ( 
+              <li className="nav-item" style={{ fontSize: '20px', marginLeft: '200px' }} >
+                <div className="nav-link btn-outline-primary" style={{ color: '#a52a52', fontSize: '25px' }} >
+                <div> <FaUser /> Welcome, </div>
+                <div>{userFirstName} {userLastName}</div>
+                </div>
+                <button className="logout-button" onClick={logout}>
+                  <FaSignOutAlt/>Logout</button>
+              </li>
+            )}
           </ul>
         </div>
       </nav>

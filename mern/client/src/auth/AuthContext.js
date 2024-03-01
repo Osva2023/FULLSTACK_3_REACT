@@ -1,40 +1,50 @@
 // AuthContext.js
-import React, { createContext, useContext, useState } from 'react';
 
+import React, { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [loginStatus, setLoginStatus] = useState(false);
-
-  const login = (email, password) => {
+  const [user, setUser] = useState(null); // Adjust according to your authentication logic
+  
+  
+  const login = (email, password, navigate) => {
+    
     return new Promise((resolve, reject) => {
-      // Replace this with your actual API call
       fetch('http://localhost:3001/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
-        .then((response) => {
-          if (response.ok) {
-            setLoggedIn(true);
-            setLoginStatus(!loginStatus); // Actualiza el estado de login
-            resolve();
-          } else {
-            response.json().then((data) => reject(data.error));
-          }
-        })
-        .catch((err) => reject(err.message));
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);                          // debugin pruposes
+        if (data.status === 'ok') {
+          // Store the token
+          const token = data.sessionToken;
+          console.log('Token:', token);              // debugin pruposes
+          resolve({
+            userId: data.user_id,
+            token
+          });
+        } else {
+          reject(new Error(data.message));
+        }
+      }) // This was missing
+      .catch((error) => {
+        console.error("Error:", error);
+        reject(error);
+      });
     });
   };
+
   const logout = () => {
     // Implementa la lógica de cierre de sesión aquí
-    // Por ejemplo, simplemente establece loggedIn en false
-    setLoggedIn(false);
+    // Por ejemplo, simplemente establece el usuario en null
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ loggedIn, login, loginStatus }}>
+    <AuthContext.Provider value={{ user, login, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

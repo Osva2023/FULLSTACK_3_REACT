@@ -1,32 +1,52 @@
-import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { useCookies } from 'react-cookie';
 import { BootstrapErrorToast } from './Alerts'; 
+import { storeSession } from './Session';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
-  const { loggedIn, login } = useAuth();
+  const { user, login , setUser} = useAuth();
   const [showErrorToast, setShowErrorToast] = useState(false);
+  const [cookies, setCookie] = useCookies(['sessionToken']);
+   
 
+  const navigate = useNavigate();
+  const sessionToken = cookies ? cookies.sessionToken : null;
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('handleSubmit is called');                          // debugin pruposes
+  
+    login(email, password, navigate)
+      .then(({userId, }) => {
+        console.log('userId:', userId);                                      // debugin pruposes
+        console.log('logged in');                                        // debugin pruposes
+        
+        storeSession(userId) // Removed semicolon here
+          .then((data) => {
+          console.log('Session stored', data);                             // debugin pruposes
 
-    login(email, password)
-      .then(() => {
-        console.log('logged in');
+          setCookie('sessionToken', data.data.token, { path: '/' , maxAge: 86400});
+          setLoginFailed(false);
+
+          setUser({userId, token: data.data.token});
+          navigate('/home');                                  
+
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error storing session", err);
+      });
+      })
+      .catch((err) => {
+        console.log('Login failed:', err);
+        setLoginFailed(true);
         setShowErrorToast(true);
       });
   };
-
-  if (loggedIn) {
-    return <Navigate to="/home" />;
-  }
-
+  
   if (loginFailed) {
     return <Navigate to="/unauthorized" />;
   }

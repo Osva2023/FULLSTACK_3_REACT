@@ -1,18 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
+import AppWithNavbar from './App';
+import { AuthProvider } from '../src/auth/AuthContext';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
-
-
-root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </React.StrictMode>,
-     
+const root = document.getElementById('root');
+createRoot(root).render(
+  <React.StrictMode>
+    <AuthProvider>
+      <AppWithNavbar />
+    </AuthProvider>
+  </React.StrictMode>
 );
