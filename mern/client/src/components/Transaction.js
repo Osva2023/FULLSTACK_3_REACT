@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Table, Form, Button, Container } from "react-bootstrap";
 import { fetchAgents } from "./GetTransactions.js";
-import { BootstrapConfirmToast } from "./Alerts";
+import { BootstrapConfirmToast, BootstrapErrorToast, BootstrapSuccessToast } from "./Alerts";
+import "./style.css";
 
 const TransactionPage = () => {
   const [agents, setAgents] = useState([]);
@@ -9,6 +10,9 @@ const TransactionPage = () => {
   const [amount, setAmount] = useState(0);
   const [selectedAgent, setSelectedAgent] = useState("");
   const [showConfirmToast, setShowConfirmToast] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,27 +40,29 @@ const TransactionPage = () => {
     <div className="content-box transaction-box flex-container">
       <Container
         style={{
-          maxWidth: "800px",
+          display: "inline-block",
+          maxWidth: "700px",
+          maxHeight: "600px",
           margin: "auto",
           paddingTop: "20px",
           paddingBottom: "20px",
+          border: "1px solid #ced4da",
+          borderRadius: "5px",
+          overflow: "hidden",
         }}
       >
-        <Table striped bordered hover>
-          <thead>
+        <h2 style={{ color: "#a52a52" }}>Recent Transactions</h2>
+        <Table id="MyTable" striped bordered hover>
+          <thead className="table-header">
             <tr>
-              <th>
-                <Button  >
-                  Date
-                </Button>
-              </th>
+              <th>Date</th>
               <th>Amount</th>
               <th>Agent Full Name</th>
             </tr>
           </thead>
           <tbody>
             {transactions.map((transaction) => {
-              console.log("transaction:", transaction);
+              
               return (
                 <tr key={transaction._id}>
                   <td>{new Date(transaction.date).toLocaleDateString()}</td>
@@ -70,12 +76,18 @@ const TransactionPage = () => {
       </Container>
       <Container
         style={{
-          maxWidth: "800px",
+          display: "inline-block",
+          maxWidth: "600px",
+          maxHeight: "500px",
           margin: "auto",
           paddingTop: "20px",
           paddingBottom: "20px",
+          border: "1px solid #ced4da",
+          borderRadius: "5px",
+          overflow: "hidden",
         }}
       >
+        <h2 style={{color: '#a52a52'}}>Insert a Transaction</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Transaction Amount</Form.Label>
@@ -87,17 +99,40 @@ const TransactionPage = () => {
                 const value = e.target.value;
                 if (value >= 0) setAmount(value);
               }}
+              style={{
+                backgroundColor: "#f8f9fa",
+                borderColor: "#ced4da",
+                borderRadius: "5px",
+              }}
             />
           </Form.Group>
 
           <Form.Group controlId="agentSelect">
             <Form.Label>Agents</Form.Label>
-            <Form.Control as="select" onChange={(e) => setSelectedAgent(e.target.value)}>
-              {transactions.map((transaction) => (
-                <option key={transaction.agent_id} value={transaction.agent_id}>
-                  {transaction.agent_name} ({transaction.agent_id})
-                </option>
-              ))}
+            <Form.Control
+              as="select"
+              onChange={(e) => setSelectedAgent(e.target.value)}
+              style={{
+                backgroundColor: "#f8f9fa",
+                borderColor: "#ced4da",
+                borderRadius: "5px",
+              }}
+            >
+              <option value="" disabled selected>
+                Select an agent
+              </option>
+              {[...new Set(transactions.map((item) => item.agent_id))].map(
+                (id, index) => {
+                  const transaction = transactions.find(
+                    (item) => item.agent_id === id
+                  );
+                  return (
+                    <option key={`${id}-${index}`} value={id}>
+                      {transaction.agent_name} ({id})
+                    </option>
+                  );
+                }
+              )}
             </Form.Control>
           </Form.Group>
           <Button variant="primary" type="submit">
@@ -108,9 +143,9 @@ const TransactionPage = () => {
           <BootstrapConfirmToast
             message="Are you sure you want to submit this transaction?"
             onConfirm={() => {
-              console.log("Submitting form with the following data:");          // debugin pruposes
-              console.log("Agent ID:", selectedAgent);                         // debugin pruposes
-              console.log("Amount:", amount);                                  // debugin pruposes
+              console.log("Submitting form with the following data:"); // debugin pruposes
+              console.log("Agent ID:", selectedAgent); // debugin pruposes
+              console.log("Amount:", amount); // debugin pruposes
               fetch("http://localhost:3001/api/transaction", {
                 method: "POST",
                 headers: {
@@ -124,9 +159,22 @@ const TransactionPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                   console.log("Success:", data);
+                  setShowConfirmToast(false);
+                  console.log('about to show success toast');
+                  setShowSuccessToast(true);
+                  setTimeout(() => {
+                    setShowSuccessToast(false);
+                    window.location.reload();
+                  }, 3000);
+                 
                 })
                 .catch((error) => {
                   console.error("Error:", error);
+                  setShowErrorToast(true);
+                  setTimeout(() => {
+                    setShowErrorToast(false);
+                    window.location.reload();
+                  }, 3000);
                 });
 
               setShowConfirmToast(false);
@@ -136,6 +184,8 @@ const TransactionPage = () => {
             }}
           />
         )}
+        {showSuccessToast && <BootstrapSuccessToast message="Transaction submitted successfully!" onClose={() => setShowSuccessToast(false)} />}
+        {showErrorToast && <BootstrapErrorToast message="Error submitting transaction" onClose={() => setShowErrorToast(false)} />}
       </Container>
     </div>
   );

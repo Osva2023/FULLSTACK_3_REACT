@@ -82,3 +82,9 @@
 .flex-container > * {
   margin-top: 20px; /* Adjust this value as needed */
 }
+.table-header {
+  background-color: #35699e;
+}
+#myTable .table-header {
+  background-color: #35699e;
+}
