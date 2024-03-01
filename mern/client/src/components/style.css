@@ -70,3 +70,15 @@
   justify-content: space-between;
   align-items: center;
 }
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: right;
+  gap: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.flex-container > * {
+  margin-top: 20px; /* Adjust this value as needed */
+}

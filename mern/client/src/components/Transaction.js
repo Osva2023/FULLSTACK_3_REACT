@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Form, Button, Container } from 'react-bootstrap';
-
+import React, { useEffect, useState } from "react";
+import { Table, Form, Button, Container } from "react-bootstrap";
+import { fetchAgents } from "./GetTransactions.js";
 
 const TransactionPage = () => {
   const [agents, setAgents] = useState([]);
   const [transactions, setTransactions] = useState([]); // Placeholder for transaction data
-
+  const [amount, setAmount] = useState(0);
   useEffect(() => {
-    // Fetch agents from your backend
-    // This is just a placeholder, replace it with your actual fetch call
-    fetch('/api/agents')
-      .then(response => response.json())
-      .then(data => setAgents(data));
+    const fetchData = async () => {
+      try {
+        const data = await fetchAgents();
+        console.log("Data:", data);
+        const sortedTransactions = data.data.transactions.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setTransactions(sortedTransactions);
+        setAgents(data.data.agents);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleDateSort = () => {
@@ -19,31 +29,70 @@ const TransactionPage = () => {
   };
 
   return (
-    <div>
-      
-      <Container style={{ maxWidth: '800px', margin: 'auto', paddingTop: '20px', paddingBottom: '20px' }}>
+    <div className="content-box transaction-box flex-container">
+      <Container
+        style={{
+          maxWidth: "800px",
+          margin: "auto",
+          paddingTop: "20px",
+          paddingBottom: "20px",
+        }}
+      >
         <Table striped bordered hover>
-        <thead>
+          <thead>
             <tr>
-              <th><Button variant="link" onClick={handleDateSort}>Date</Button></th>
+              <th>
+                <Button variant="link" onClick={handleDateSort}>
+                  Date
+                </Button>
+              </th>
               <th>Amount</th>
               <th>Agent Full Name</th>
             </tr>
           </thead>
+          <tbody>
+            {transactions.map((transaction) => {
+              console.log("transaction:", transaction);
+              return (
+                <tr key={transaction._id}>
+                  <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                  <td>{String(transaction["amount"])}</td>
+                  <td>{String(transaction["agent_name"])}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </Table>
       </Container>
-      <Container style={{ maxWidth: '800px', margin: 'auto', paddingTop: '20px', paddingBottom: '20px' }}>
+      <Container
+        style={{
+          maxWidth: "800px",
+          margin: "auto",
+          paddingTop: "20px",
+          paddingBottom: "20px",
+        }}
+      >
         <Form>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Transaction Amount</Form.Label>
-            <Form.Control type="number" placeholder="Enter amount" />
+            <Form.Control
+              type="number"
+              placeholder="Enter amount"
+              value={amount}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value >= 0) setAmount(value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group controlId="agentSelect">
             <Form.Label>Agents</Form.Label>
             <Form.Control as="select">
-              {agents.map(agent => (
-                <option value={agent.id}>{agent.name}</option>
+              {agents.map((agent) => (
+                <option key={agent.agent_name} value={agent.agent_name}>
+                  {agent.agent_name}
+                </option>
               ))}
             </Form.Control>
           </Form.Group>
