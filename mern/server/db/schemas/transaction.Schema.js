@@ -11,6 +11,10 @@ const TransactionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  agent_id: {
+    type: String,
+    required: true
+  },
 
   amount: {
     type: Number,

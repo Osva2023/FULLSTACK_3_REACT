@@ -89,9 +89,9 @@ const TransactionPage = () => {
           <Form.Group controlId="agentSelect">
             <Form.Label>Agents</Form.Label>
             <Form.Control as="select">
-              {agents.map((agent) => (
-                <option key={agent.agent_name} value={agent.agent_name}>
-                  {agent.agent_name}
+              {transactions.map((transaction) => (
+                <option key={transaction.agent_id} value={transaction.agent_id}>
+                  {transaction.agent_name} ({transaction.agent_id})
                 </option>
               ))}
             </Form.Control>
