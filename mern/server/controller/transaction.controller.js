@@ -43,3 +43,26 @@ export const findTransactionList = async (req, res) => {
       }); // Send an error message if something goes wrong
     }
   };
+  export const createTransaction = async (req, res) => {
+    const { agent_id, amount } = req.body;
+    console.log ('Received POST request with agent_id:', agent_id, 'and amount:', amount);      // debugin pruposes
+    try {
+      // Look up the agent name
+      const transaction = await Transaction.findOne({agent_id: agent_id});
+      const agent_name = transaction ? transaction.agent_name : null;
+      
+      console.log('Agent found with name:', agent_name);      // debugin pruposes
+      // Create the transaction
+      const newTransaction = new Transaction({
+        agent_id,
+        agent_name,
+        amount,
+      });
+  
+      const savedTransaction = await newTransaction.save();
+      console.log ('Transaction saved:', savedTransaction);      // debugin pruposes
+      res.status(201).json({ status: 'ok', data: savedTransaction, message: null });
+    } catch (error) {
+      res.status(500).json({ status: 'error', data: null, message: error.message });
+    }
+  };

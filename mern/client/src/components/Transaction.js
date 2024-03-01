@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Table, Form, Button, Container } from "react-bootstrap";
 import { fetchAgents } from "./GetTransactions.js";
+import { BootstrapConfirmToast } from "./Alerts";
 
 const TransactionPage = () => {
   const [agents, setAgents] = useState([]);
   const [transactions, setTransactions] = useState([]); // Placeholder for transaction data
   const [amount, setAmount] = useState(0);
+  const [selectedAgent, setSelectedAgent] = useState("");
+  const [showConfirmToast, setShowConfirmToast] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,8 +27,9 @@ const TransactionPage = () => {
     fetchData();
   }, []);
 
-  const handleDateSort = () => {
-    // Implement your sorting logic here
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowConfirmToast(true);
   };
 
   return (
@@ -42,7 +46,7 @@ const TransactionPage = () => {
           <thead>
             <tr>
               <th>
-                <Button variant="link" onClick={handleDateSort}>
+                <Button  >
                   Date
                 </Button>
               </th>
@@ -72,7 +76,7 @@ const TransactionPage = () => {
           paddingBottom: "20px",
         }}
       >
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Transaction Amount</Form.Label>
             <Form.Control
@@ -88,7 +92,7 @@ const TransactionPage = () => {
 
           <Form.Group controlId="agentSelect">
             <Form.Label>Agents</Form.Label>
-            <Form.Control as="select">
+            <Form.Control as="select" onChange={(e) => setSelectedAgent(e.target.value)}>
               {transactions.map((transaction) => (
                 <option key={transaction.agent_id} value={transaction.agent_id}>
                   {transaction.agent_name} ({transaction.agent_id})
@@ -100,6 +104,38 @@ const TransactionPage = () => {
             Submit
           </Button>
         </Form>
+        {showConfirmToast && (
+          <BootstrapConfirmToast
+            message="Are you sure you want to submit this transaction?"
+            onConfirm={() => {
+              console.log("Submitting form with the following data:");          // debugin pruposes
+              console.log("Agent ID:", selectedAgent);                         // debugin pruposes
+              console.log("Amount:", amount);                                  // debugin pruposes
+              fetch("http://localhost:3001/api/transaction", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  agent_id: selectedAgent,
+                  amount: amount,
+                }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log("Success:", data);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+
+              setShowConfirmToast(false);
+            }}
+            onCancel={() => {
+              setShowConfirmToast(false);
+            }}
+          />
+        )}
       </Container>
     </div>
   );
