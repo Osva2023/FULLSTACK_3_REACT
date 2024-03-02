@@ -38,7 +38,7 @@ export const BootstrapErrorToast = ({ message, onClose }) => (
       justifyContent: "center",
     }}
   >
-    <Toast show={true} onClose={onClose} bg="danger">
+    <Toast show={true} onClose={onClose} bg="danger" >
       <Toast.Header closeButton={false}>
         <strong className="mr-auto">Error</strong>
       </Toast.Header>
