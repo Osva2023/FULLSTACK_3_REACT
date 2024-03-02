@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { BootstrapErrorToast, BootstrapSuccessToast, BootstrapConfirmToast } from './Alerts';
+import {
+  BootstrapErrorToast,
+  BootstrapSuccessToast,
+  BootstrapConfirmToast,
+} from "./Alerts";
 
+// FUNCTION TO EDIT AN AGENT AND COMPONENTS
 export default function Edit() {
   const [form, setForm] = useState({
     first_name: "",
@@ -21,6 +26,8 @@ export default function Edit() {
   const navigate = useNavigate();
 
   useEffect(() => {
+
+    // This method will fetch agents from the database
     async function fetchData() {
       const id = params.id.toString();
       const response = await fetch(`http://localhost:3001/agent/${id}`, {
@@ -58,7 +65,14 @@ export default function Edit() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    if (!form.first_name || !form.last_name || !form.region || !form.rating || !form.sales || !form.fee) {
+    if (
+      !form.first_name ||
+      !form.last_name ||
+      !form.region ||
+      !form.rating ||
+      !form.sales ||
+      !form.fee
+    ) {
       setShowErrorToast(true);
       return;
     }
@@ -73,11 +87,12 @@ export default function Edit() {
         fee: form.fee,
       };
 
+      // This method will update a AGENT in the database
       await fetch(`http://localhost:3001/agent/update/${params.id}`, {
         method: "POST",
         body: JSON.stringify(editedPerson),
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
       });
 
@@ -92,8 +107,8 @@ export default function Edit() {
 
   function handleConfirm() {
     setIsUpdateConfirmed(true);
-    setIsConfirmToastVisible(false); // Cerrar el mensaje de confirmación después de confirmar
-    onSubmit(new Event("dummy")); // Enviar el formulario después de la confirmación
+    setIsConfirmToastVisible(false);
+    onSubmit(new Event("dummy"));
   }
 
   function handleCancel() {
@@ -102,7 +117,7 @@ export default function Edit() {
   }
 
   return (
-    <div className="content-box edit-box" >
+    <div className="content-box edit-box">
       <h3>Update Agent</h3>
       <form onSubmit={onSubmit}>
         <div className="form-group">
@@ -176,8 +191,18 @@ export default function Edit() {
           </button>
         </div>
       </form>
-      {showErrorToast && <BootstrapErrorToast message="Please fill in all required fields." onClose={() => setShowErrorToast(false)} />}
-      {showSuccessToast && <BootstrapSuccessToast message="Agent updated successfully." onClose={() => setShowSuccessToast(false)} />}
+      {showErrorToast && (
+        <BootstrapErrorToast
+          message="Please fill in all required fields."
+          onClose={() => setShowErrorToast(false)}
+        />
+      )}
+      {showSuccessToast && (
+        <BootstrapSuccessToast
+          message="Agent updated successfully."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
       {isConfirmToastVisible && (
         <BootstrapConfirmToast
           message="Are you sure you want to continue with the update?"

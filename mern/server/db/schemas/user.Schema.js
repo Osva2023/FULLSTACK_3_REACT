@@ -1,6 +1,6 @@
-// userModel.js
+// USER SCHEMA
 import mongoose from 'mongoose';
-//import { getDb } from '/Users/gloriagomez/osvaldo/Codeboxx/FULLSTACK_2_MERN/mern/server/db/conn.js';  //change these later
+
 
 const userSchema = new mongoose.Schema({
  first_name: { type: String, required: true },

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { BootstrapErrorToast, BootstrapSuccessToast } from './Alerts';
 
+// FUNCTION TO CREATE A NEW AGENT AND ELEMENTS
 export default function Create() {
     const [form, setForm] = useState({
         first_name: '',

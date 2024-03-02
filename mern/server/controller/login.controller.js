@@ -4,6 +4,7 @@ import { generateSessionToken } from '../services/authenService.js';
 
 import cookie from 'cookie';
 
+ // LOGIC TO LOGIN THE USER
 export const loginUser = async (req, res) => {
     console.log('Received login request:', req.body);      // debugin pruposes
     const { email, password } = req.body;
@@ -16,18 +17,18 @@ export const loginUser = async (req, res) => {
         }
 
         const sessionToken = generateSessionToken(user._id);
-        console.log('Generated session token:', sessionToken); // debugin pruposes
+        
 
         const cookieOptions = {
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            maxAge: 24 * 60 * 60 * 1000, 
         };
         res.setHeader('Set-Cookie', cookie.serialize('sessionToken', sessionToken, cookieOptions));
         
         
         res.status(200).json({ status: 'ok', message: 'Logged in successfully', first_name: user.first_name, sessionToken, user_id: user._id });
     } catch (err) {
-        // Manejar errores, por ejemplo, enviar una respuesta de error
+        
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }

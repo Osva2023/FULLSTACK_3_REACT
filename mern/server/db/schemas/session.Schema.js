@@ -1,4 +1,4 @@
-// session.Schema.js
+// SESSION SCHEMA
 import mongoose from 'mongoose';
 
 const sessionSchema = new mongoose.Schema({
@@ -7,7 +7,7 @@ const sessionSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-sessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 24 * 60 * 60 }); // 24 horas
+sessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 24 * 60 * 60 }); 
 
 const Session = mongoose.model('Session', sessionSchema);
 

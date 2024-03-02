@@ -1,7 +1,5 @@
-// UnauthorizedPage.js
-
 import React from "react";
-
+// UNAUTHORIZED PAGE COMPONENT
 function UnauthorizedPage() {
   return (
     <div className="container">

@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { BootstrapErrorToast, BootstrapSuccessToast, BootstrapConfirmToast } from './Alerts';
+import {
+  BootstrapErrorToast,
+  BootstrapSuccessToast,
+  BootstrapConfirmToast,
+} from "./Alerts";
 
+// COMPONENT FOR THE AGENT LIST
 const Agent = (props) => (
   <tr>
-    <td>{props.agent.last_name}, {props.agent.first_name}</td>
+    <td>
+      {props.agent.last_name}, {props.agent.first_name}
+    </td>
     <td>{props.agent.region}</td>
     <td>{props.agent.rating}</td>
     <td>{props.agent.sales}</td>
     <td>{props.agent.fee}</td>
     <td>
-      <Link className="btn btn-link" to={`/edit/${props.agent._id}`}>Edit</Link> |
-      <button className="btn btn-link"
+      <Link className="btn btn-link" to={`/edit/${props.agent._id}`}>
+        Edit
+      </Link>{" "}
+      |
+      <button
+        className="btn btn-link"
         onClick={() => {
           props.confirmDelete(props.agent._id);
         }}
@@ -23,6 +34,7 @@ const Agent = (props) => (
   </tr>
 );
 
+//FUNCTION TO HANDLE AND DISPLAY THE AGENT LIST
 export default function AgentList() {
   const [agents, setAgents] = useState([]);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -33,7 +45,7 @@ export default function AgentList() {
 
   useEffect(() => {
     async function getAgents() {
-      console.log('Fetching agents from the database...'); // debugging purposes
+      console.log("Fetching agents from the database..."); // debugging purposes
       const response = await fetch(`http://localhost:3001/agent`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
@@ -41,26 +53,26 @@ export default function AgentList() {
         return;
       }
       const agents = await response.json();
-      console.log('Agents fetched from the database:', agents); // debugging purposes
+
       setAgents(agents);
     }
     getAgents();
     return;
-  }, []); // Empty dependency array // debugging purposes
+  }, []);
 
   // This method will delete an agent
   async function deleteAgent(id) {
     try {
       await fetch(`http://localhost:3001/agent/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
-      setShowErrorToast(false); // Hide the error toast
-      setShowSuccessToast(true); // Show the success toast
+      setShowErrorToast(false);
+      setShowSuccessToast(true);
       const newAgents = agents.filter((el) => el._id !== id);
       setAgents(newAgents);
     } catch (error) {
-      setShowSuccessToast(false); // Hide the success toast
-      setShowErrorToast(true); // Show the error toast
+      setShowSuccessToast(false);
+      setShowErrorToast(true);
       console.log(error);
     }
   }
@@ -88,11 +100,7 @@ export default function AgentList() {
   function agentList() {
     return agents.map((agent) => {
       return (
-        <Agent
-          agent={agent}
-          confirmDelete={confirmDelete}
-          key={agent._id}
-        />
+        <Agent agent={agent} confirmDelete={confirmDelete} key={agent._id} />
       );
     });
   }
@@ -100,27 +108,32 @@ export default function AgentList() {
   // This following section will display the table with the agents of individuals.
   return (
     <>
-      {isConfirmToastVisible &&
+      {isConfirmToastVisible && (
         <BootstrapConfirmToast
           message="Are you sure you want to delete this agent?"
           onConfirm={handleDeleteConfirmation}
           onCancel={handleDeleteCancel}
         />
-      }
-      {showSuccessToast &&
+      )}
+      {showSuccessToast && (
         <BootstrapSuccessToast
           message="Agent deleted successfully!"
-          onClose={() => { console.log('Closing toast'); setShowSuccessToast(false); }}
+          onClose={() => {
+            console.log("Closing toast");
+            setShowSuccessToast(false);
+          }}
         />
-      }
-      {showErrorToast &&
+      )}
+      {showErrorToast && (
         <BootstrapErrorToast
           message="Error deleting agent. Please try again."
-          onClose={() => { console.log('Closing toast'); setShowErrorToast(false); }}
+          onClose={() => {
+            console.log("Closing toast");
+            setShowErrorToast(false);
+          }}
         />
-      }
-      <div style={{ margin: '20px auto', maxWidth: '1400px' }}>
-        
+      )}
+      <div style={{ margin: "20px auto", maxWidth: "1400px" }}>
         <h3>Agent List</h3>
         <table className="table table-striped" style={{ marginTop: 20 }}>
           <thead>

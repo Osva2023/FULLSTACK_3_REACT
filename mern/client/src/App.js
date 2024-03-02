@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
-//import ValidateTokenOnNav from './auth/validateTokenOnNav.js';
+
 import AgentList from "../src/components/agentList";
 import UnauthorizedPage from "../src/components/unnauthorized.js";
 import { Login } from "../src/components/Login";
@@ -28,7 +28,7 @@ function App() {
   );
 }
 
-// Usa el componente Navbar aquí, fuera del AuthProvider
+// FUNCTION TO RENDER THE APP WITH THE NAVBAR
 const AppWithNavbar = () => {
   const { user, logout } = useAuth();
   const firstName = user ? user.first_name : null; // obtain the first name from user object

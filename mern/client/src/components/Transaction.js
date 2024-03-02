@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Table, Form, Button, Container } from "react-bootstrap";
 import { fetchAgents } from "./GetTransactions.js";
-import { BootstrapConfirmToast, BootstrapErrorToast, BootstrapSuccessToast } from "./Alerts";
+import {
+  BootstrapConfirmToast,
+  BootstrapErrorToast,
+  BootstrapSuccessToast,
+} from "./Alerts";
 import "./style.css";
 
+// TRANSACTION PAGE COMPONENT
 const TransactionPage = () => {
   const [agents, setAgents] = useState([]);
   const [transactions, setTransactions] = useState([]); // Placeholder for transaction data
@@ -35,7 +40,7 @@ const TransactionPage = () => {
     e.preventDefault();
     setShowConfirmToast(true);
   };
-
+  // RENDER THE TRANSACTION PAGE
   return (
     <div className="content-box transaction-box flex-container">
       <Container
@@ -62,7 +67,6 @@ const TransactionPage = () => {
           </thead>
           <tbody>
             {transactions.map((transaction) => {
-              
               return (
                 <tr key={transaction._id}>
                   <td>{new Date(transaction.date).toLocaleDateString()}</td>
@@ -87,7 +91,7 @@ const TransactionPage = () => {
           overflow: "hidden",
         }}
       >
-        <h2 style={{color: '#a52a52'}}>Insert a Transaction</h2>
+        <h2 style={{ color: "#a52a52" }}>Insert a Transaction</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Transaction Amount</Form.Label>
@@ -160,13 +164,12 @@ const TransactionPage = () => {
                 .then((data) => {
                   console.log("Success:", data);
                   setShowConfirmToast(false);
-                  console.log('about to show success toast');
+                  console.log("about to show success toast");
                   setShowSuccessToast(true);
                   setTimeout(() => {
                     setShowSuccessToast(false);
                     window.location.reload();
                   }, 3000);
-                 
                 })
                 .catch((error) => {
                   console.error("Error:", error);
@@ -184,8 +187,18 @@ const TransactionPage = () => {
             }}
           />
         )}
-        {showSuccessToast && <BootstrapSuccessToast message="Transaction submitted successfully!" onClose={() => setShowSuccessToast(false)} />}
-        {showErrorToast && <BootstrapErrorToast message="Error submitting transaction" onClose={() => setShowErrorToast(false)} />}
+        {showSuccessToast && (
+          <BootstrapSuccessToast
+            message="Transaction submitted successfully!"
+            onClose={() => setShowSuccessToast(false)}
+          />
+        )}
+        {showErrorToast && (
+          <BootstrapErrorToast
+            message="Error submitting transaction"
+            onClose={() => setShowErrorToast(false)}
+          />
+        )}
       </Container>
     </div>
   );

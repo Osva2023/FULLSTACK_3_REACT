@@ -1,4 +1,4 @@
-// routes/valid.router.js
+//VALIDATION ROUTER
 import express from 'express';
 import { validateTokenController } from '../controller/valid.controller.js';
 
