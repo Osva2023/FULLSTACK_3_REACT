@@ -26,7 +26,9 @@ export const BootstrapSuccessToast = ({ message, onClose }) => (
 );
 
 // TOASTER FOR ERROR
-export const BootstrapErrorToast = ({ message, onClose }) => (
+export const BootstrapErrorToast = ({ message, onClose }) => {
+  console.log("BootstrapErrorToast called");
+  return (
   <div
     style={{
       position: "fixed",
@@ -46,6 +48,7 @@ export const BootstrapErrorToast = ({ message, onClose }) => (
     </Toast>
   </div>
 );
+  };
 
 // TOASTER FOR CONFIRMATION
 export const BootstrapConfirmToast = ({ message, onConfirm, onCancel }) => (

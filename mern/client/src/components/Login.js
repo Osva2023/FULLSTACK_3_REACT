@@ -17,7 +17,6 @@ export function Login() {
   const navigate = useNavigate();
   const sessionToken = cookies ? cookies.sessionToken : null;
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("handleSubmit is called"); // debugin pruposes
@@ -27,10 +26,8 @@ export function Login() {
         console.log("userId:", userId); // debugin pruposes
         console.log("logged in"); // debugin pruposes
 
-        storeSession(userId) 
+        storeSession(userId)
           .then((data) => {
-            
-
             setCookie("sessionToken", data.data.token, {
               path: "/",
               maxAge: 86400,
@@ -41,18 +38,21 @@ export function Login() {
             navigate("/home");
           })
           .catch((err) => {
-            
+            console.log("Error storing session:", err);
+            setLoginFailed(true);
+            setShowErrorToast(true);
           });
       })
       .catch((err) => {
         console.log("Login failed:", err);
-        setLoginFailed(true);
         setShowErrorToast(true);
         
+        setTimeout(() => setLoginFailed(true), 10000);
       });
   };
 
   if (loginFailed) {
+    
     return <Navigate to="/unauthorized" />;
   }
   // Render the login form
@@ -62,8 +62,7 @@ export function Login() {
         {showErrorToast && (
           <BootstrapErrorToast
             message="Login failed. Please try again."
-           onClose={() => setShowErrorToast(false)}
-              
+            onClose={() => setShowErrorToast(false)}
           />
         )}
       </div>
