@@ -67,5 +67,31 @@ function TransactionCard() {
     </Card>
   );
 }
+function ReportCard() {
+  const navigate = useNavigate();
+  const handleReportClick = () => {
+    navigate("/report");
+  };
+  return (
+    <Card style={{ width: "25%" }}>
+      <Card.Img
+        variant="top"
+        src={process.env.PUBLIC_URL + "/reportgraphic.jpg"}
+        style={{ height: "300px" }}
+      />
+      <Card.Body>
+        <Card.Title>Reports</Card.Title>
+        <Card.Text>
+          Use for manage the Transaction of the Company's Agents
+        </Card.Text>
+        <Button variant="primary" onClick={handleReportClick}>
+          to Report Page
+        </Button>
+      </Card.Body>
+    </Card>
+  );
+}
+  
+
 // EXPORTING THE COMPONENTS
-export { AgentListCard, TransactionCard };
+export { AgentListCard, TransactionCard, ReportCard };

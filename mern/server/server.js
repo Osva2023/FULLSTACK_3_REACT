@@ -8,7 +8,7 @@ import validRouter from './routes/valid.router.js';
 import sessionRoutes from './routes/session.route.js';
 import printMiddleware from './controller/printer.middleware.js';
 import  transactionRouter from './routes/transaction.route.js';
-
+import reportRoutes from './routes/report.route.js';
 dotenv.config({ path: './config.env' });
 
 const port = process.env.PORT || 3001;
@@ -22,6 +22,7 @@ app.use( sessionRoutes);
 app.use(validRouter)
 app.use(agentRoutes);
 app.use(transactionRouter);
+app.use(reportRoutes);
 
 // Connect to MongoDB before starting the server
 connectToServer().then(async () => {

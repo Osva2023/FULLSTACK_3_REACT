@@ -18,6 +18,7 @@ import TransactionPage from "./components/Transaction.js";
 import Navbar from "./components/navbar"; // Importa tu componente Navbar
 import "./components/style.css";
 import { withAuthProtection } from "./auth/withAuthProtection";
+import  Report from "./components/report.js";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ const AppWithNavbar = () => {
   const ProtectedEdit = withAuthProtection(Edit);
   const ProtectedCreate = withAuthProtection(Create);
   const ProtectedTransactionPage = withAuthProtection(TransactionPage);
+  const ProtectedReport = withAuthProtection(Report);
   return (
     <AuthProvider>
       <Router>
@@ -49,6 +51,7 @@ const AppWithNavbar = () => {
             <Route path="/agent-list" element={<ProtectedAgentList />} />
             <Route path="/edit/:id" element={<ProtectedEdit />} />
             <Route path="/create" element={<ProtectedCreate />} />
+            <Route path="/report" element={<ProtectedReport />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route
               path="/transaction/"
