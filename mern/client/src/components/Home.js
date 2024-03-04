@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AgentListCard, TransactionCard } from "./Cards";
+import { AgentListCard, TransactionCard, ReportCard } from "./Cards";
 import { Link } from "react-router-dom";
 //COMPONENTS FOR THE HOME PAGE
 const HomeComponent = () => {
@@ -16,6 +16,7 @@ const HomeComponent = () => {
       >
         <AgentListCard />
         <TransactionCard />
+        <ReportCard />
       </div>
     </div>
   );
