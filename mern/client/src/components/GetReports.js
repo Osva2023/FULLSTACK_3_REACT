@@ -2,6 +2,7 @@
 
 // Función para obtener los datos del informe desde el servidor
 export const fetchReportData = async () => {
+  console.log("fetchReportData called");                                        // debugging purposes
     try {
     const response = await fetch('http://localhost:3001/api/report-data');
     

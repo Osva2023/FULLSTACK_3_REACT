@@ -1,12 +1,15 @@
+import 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
 import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import { fetchReportData } from "./GetReports";
 
 export default function ReportBar() {
-    const [reportData, setReportData] = useState([]);
+  const [reportData, setReportData] = useState({ agent_bar_data: [], transaction_line_data: [] });
   // Supongamos que tienes un array de objetos con los datos de transacciones
   useEffect(() => {
   const fetchData = async () => {
+    console.log ("Fetching data...");                                     // debugging purposes
       const data = await fetchReportData();
       if (data) {
           setReportData(data);
@@ -18,14 +21,14 @@ export default function ReportBar() {
   }, []);
 
   // Configura los datos para el gráfico de barras
-  const agents = reportData.agent_bar_data.map((item) => item.agent_name);
-  const amounts = reportData.agent_bar_data.map((item) => item.total_amount);
+  const agents = reportData.agent_bar_data ? reportData.agent_bar_data.map((item) => item[0]) : [];
+  const amounts = reportData.agent_bar_data ? reportData.agent_bar_data.map((item) => item[1]) : [];
 
   const barData = {
     labels: agents,
     datasets: [
       {
-        label: "Total de Transacciones por Agente",
+        label: "Total transactions for Agent",
         data: amounts,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
@@ -41,8 +44,9 @@ export default function ReportBar() {
       },
     },
   };
-   const dates = reportData.transaction_line_data.map((item) => item.date);
-   const montos = reportData.transaction_line_data.map((item) => item.total_amount);
+
+  const dates = reportData.transaction_line_data ? reportData.transaction_line_data.map((item) => item[0]) : [];
+  const montos = reportData.transaction_line_data ? reportData.transaction_line_data.map((item) => item[1]) : [];
    console.log(dates);
     console.log(montos);
 
@@ -51,7 +55,7 @@ export default function ReportBar() {
     labels: dates,
     datasets: [
       {
-        label: "Total de Transacciones por Fecha",
+        label: "Total transactions by Date",
         data: montos,
         fill: false,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -66,20 +70,20 @@ export default function ReportBar() {
   const lineOptions = {
     scales: {
       x: {
-        type: "time",
+        type: 'time',
         time: {
-          unit: "day",
+          unit: 'day',
         },
         title: {
           display: true,
-          text: "Fechas",
+          text: 'Fechas',
         },
       },
       y: {
         beginAtZero: true,
         title: {
           display: true,
-          text: "Total de Transacciones",
+          text: 'Total de Transacciones',
         },
       },
     },
@@ -88,16 +92,16 @@ export default function ReportBar() {
   return (
     <div>
       <h1>Reports</h1>
-
-      {/* Gráfico de Barras */}
-      <div>
-        <h2>Gráfico de Barras</h2>
+  
+      {/* Bar Chart */}
+      <div style={{ border: '1px solid black', width: '50%', margin: 'auto' }}>
+        <h2>Bar Chart</h2>
         <Bar data={barData} options={barOptions} />
       </div>
-
-      {/* Gráfico de Líneas */}
-      <div>
-        <h2>Gráfico de Líneas</h2>
+  
+      {/* Line Chart */}
+      <div style={{ border: '1px solid black', width: '50%', margin: 'auto', marginTop: '20px' }}>
+        <h2>Line Chart</h2>
         <Line data={lineData} options={lineOptions} />
       </div>
     </div>
