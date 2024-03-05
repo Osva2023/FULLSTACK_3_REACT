@@ -1,0 +1,90 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .content-box {
+    border: 1px solid #000; /* Add a border */
+    border-radius: 10px; /* Round the corners */
+    padding: 20px; /* Add some padding */
+    text-align: center; /* Center the text */
+  }
+  .navbar-custom {
+    margin-bottom: 20px;
+  }
+  .navbar-custom .nav-link.btn {
+    padding: 8px 16px; /* Ajusta el relleno según tus preferencias */
+    border-radius: 5px; /* Ajusta el radio del borde según tus preferencias */
+    border: 1px solid #007bff; /* Ajusta el color del borde según tus preferencias */
+    background-color: #007bff; /* Ajusta el color de fondo según tus preferencias */
+    color: #fff; /* Ajusta el color del texto según tus preferencias */
+  }
+  .create-box {
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 50%; /* Puedes ajustar el ancho según tus preferencias */
+    margin: auto; /* Centra el elemento horizontalmente */
+    margin-top: 100px;
+}
+.edit-box {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  width: 50%; /* Puedes ajustar el ancho según tus preferencias */
+  margin: auto; /* Centra el elemento horizontalmente */
+  margin-top: 100px; 
+}
+.content-box form {
+    text-align: left; /* O cualquier otra alineación que desees */
+  }
+  .required {
+    color: red;
+    margin-left: 4px; /* Para agregar espacio entre la etiqueta y el asterisco */
+}
+.card-container {
+  margin-top: '40px';
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.logout-button {
+  background-color: #f8f9fa;
+  border: none;
+  color: #316fad;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin: 4px 2px 4px 60px; 
+}
+.nav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: right;
+  gap: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.flex-container > * {
+  margin-top: 20px; /* Adjust this value as needed */
+}
+.table-header {
+  background-color: #35699e;
+}
+#myTable .table-header {
+  background-color: #35699e;
+}
